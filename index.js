@@ -1,0 +1,16 @@
+/* empty css                      */import{a as g,S as m}from"./assets/vendor-DBMDmZZa.js";(function(){const e=document.createElement("link").relList;if(e&&e.supports&&e.supports("modulepreload"))return;for(const t of document.querySelectorAll('link[rel="modulepreload"]'))i(t);new MutationObserver(t=>{for(const s of t)if(s.type==="childList")for(const n of s.addedNodes)n.tagName==="LINK"&&n.rel==="modulepreload"&&i(n)}).observe(document,{childList:!0,subtree:!0});function o(t){const s={};return t.integrity&&(s.integrity=t.integrity),t.referrerPolicy&&(s.referrerPolicy=t.referrerPolicy),t.crossOrigin==="use-credentials"?s.credentials="include":t.crossOrigin==="anonymous"?s.credentials="omit":s.credentials="same-origin",s}function i(t){if(t.ep)return;t.ep=!0;const s=o(t);fetch(t.href,s)}})();const f="16588925-02413834d9828552035921ade",y="https://pixabay.com/api/";class L{constructor(){this.query="",this.page=1,this.perPage=15}async fetchImages(){try{return(await g.get(y,{params:{key:f,q:this.query,image_type:"photo",orientation:"horizontal",safesearch:!0,page:this.page,per_page:this.perPage}})).data}catch(e){throw console.error("Error fetching images:",e),e}}resetPage(){this.page=1}incrementPage(){this.page+=1}setQuery(e){this.query=e}}const v=r=>r.map(({webformatURL:e,largeImageURL:o,tags:i,likes:t,views:s,comments:n,downloads:u})=>`
+        <a class='gallery-item' href='${o}'>
+          <img src='${e}' alt='${i}' loading='lazy' />
+          <div class='info'>
+            <div class='info-item'>Likes<p> ${t}</p></div>
+            <div class='info-item'>Views<p> ${s}</p></div>
+            <div class='info-item'>Comments<p> ${n}</p></div>
+            <div class='info-item'>Downloads<p> ${u}</p></div>
+          </div>
+        </a>
+      `).join(""),w=(r,e,o=!1)=>{o?r.insertAdjacentHTML("beforeend",e):r.innerHTML=e},P=(r,e)=>{e.innerHTML=`<p class='message'>${r}</p>`},b=document.querySelector("#search-form"),d=document.querySelector(".gallery"),l=document.querySelector(".load-more"),c=document.querySelector(".message-container"),p=document.querySelector(".loader"),a=new L,S=new m(".gallery a"),q=()=>p.classList.add("visible"),M=()=>p.classList.remove("visible"),H=()=>{a.resetPage(),l.classList.add("hidden"),p.classList.add("hidden"),c.innerHTML="",d.innerHTML=""},E=async r=>{r.preventDefault();const e=r.target.elements.searchQuery.value.trim();e&&(H(),a.setQuery(e),await h())},h=async()=>{q();try{const{hits:r,totalHits:e}=await a.fetchImages();if(r.length===0&&a.page===1){P("No images found. Please try a different search query.",c);return}const o=v(r);if(w(d,o,a.page>1),S.refresh(),a.page*a.perPage>=e?(l.classList.add("hidden"),c.innerHTML=`
+        <p class="end-message">We're sorry, but you've reached the end of search results.</p>
+      `):l.classList.remove("hidden"),a.page>1){const{height:i}=d.firstElementChild.getBoundingClientRect();window.scrollBy({top:i*2,behavior:"smooth"})}}catch(r){console.error("Error fetching images:",r),c.innerHTML=`
+      <p class="error-message">Something went wrong. Please try again later.</p>
+    `}finally{M()}},$=async()=>{a.incrementPage(),await h()};b.addEventListener("submit",E);l.addEventListener("click",$);
+//# sourceMappingURL=index.js.map
